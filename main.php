@@ -7,6 +7,7 @@
     <title>Register</title>
 </head>
 <body>
+
 <?php
 
 $dbhost = 'localhost';
@@ -46,18 +47,21 @@ if (mysqli_num_rows($query) == 0){
     $id = '';
     $passwd = md5($passwd);
 }
-else
-    $error_msg = 'The username <i>'.$username.'</i> is already taken. Please use another.'
-
+else{
+    $error_msg = 'The username <i>'.$username.'</i> is already taken. Please use another.';
+}
+   
 
 // inserting....
-$query = mysqli_query($link, "INSERT INTO register (username,password,gender) VALUES ('{$username}','{$passwd}','{$gender}') ");
 
+$sql ="INSERT INTO register (`username`,`password`,`gender`)
+VALUES ('$username','$passwd','$gender') ";
+
+$retval=mysqli_query($link,$sql);
 
 // verify the user's account was created
 $query = mysqli_query($link, "SELECT * FROM register WHERE username='{$username}'");
 if (mysqli_num_rows($query) == 1){
-
     $success = true;
 }
 else
@@ -67,7 +71,7 @@ else
     mysqli_close($link);
 ?>
 
-
+<!-- The Design  -->
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"  method="POST">
 <?php
 
@@ -81,13 +85,11 @@ else if (isset($error_msg)) {
 
 ?>
 
-<!-- The Design  -->
-
 <label  for='username'>username</label>
 <input  type="text" name="username" id="username" placeholder="username" required>
 <br>
-<label for='username'>username</label>
-<input type='password' name="pass" id="pass" placeholder="password" required>
+<label for='username'>password</label>
+<input type='password' name="password" id="password" placeholder="password" required>
 <br>
 <label for='gender'>Gender</label>
     <input type="radio" name="gender" value="male"> Male
